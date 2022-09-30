@@ -81,17 +81,13 @@ local uis = game:GetService("UserInputService")
 
 local keybindConnection
 
-function library:Destroy()
+function library:destroy()
     TurtleUiLib:Destroy()
     if keybindConnection then
         keybindConnection:Disconnect()
     end
 end
-function library:Hide()
-   TurtleUiLib.Enabled = not TurtleUiLib.Enabled
-end	
-
-function library:Keybind(key)
+function library:keybind(key)
     if keybindConnection then keybindConnection:Disconnect() end
 
     keybindConnection = uis.InputBegan:Connect(function(input, gp)
@@ -101,7 +97,7 @@ function library:Keybind(key)
     end)
 end
 
-function library:Window(name) 
+function library:window(name) 
     windowCount = windowCount + 1
     local winCount = windowCount
     local zindex = winCount * 7
@@ -109,8 +105,8 @@ function library:Window(name)
 
     UiWindow.Name = "UiWindow"
     UiWindow.Parent = TurtleUiLib
-    UiWindow.BackgroundColor3 = Color3.fromRGB(0, 151, 230)
-    UiWindow.BorderColor3 = Color3.fromRGB(0, 151, 230)
+    UiWindow.BackgroundColor3 = Color3.fromRGB(137, 87, 216)
+    UiWindow.BorderColor3 = Color3.fromRGB(137, 87, 216)
     UiWindow.Position = UDim2.new(0, xOffset, 0, 20)
     UiWindow.Size = UDim2.new(0, 207, 0, 33)
     UiWindow.ZIndex = 4 + zindex
@@ -122,8 +118,8 @@ function library:Window(name)
     local Header = Instance.new("Frame")
     Header.Name = "Header"
     Header.Parent = UiWindow
-    Header.BackgroundColor3 = Color3.fromRGB(0, 168, 255)
-    Header.BorderColor3 = Color3.fromRGB(0, 168, 255)
+    Header.BackgroundColor3 = Color3.fromRGB(98, 35, 201)
+    Header.BorderColor3 = Color3.fromRGB(98, 35, 201)
     Header.Position = UDim2.new(0, 0, -0.0202544238, 0)
     Header.Size = UDim2.new(0, 207, 0, 26)
     Header.ZIndex = 5 + zindex
@@ -131,28 +127,28 @@ function library:Window(name)
     local HeaderText = Instance.new("TextLabel")
     HeaderText.Name = "HeaderText"
     HeaderText.Parent = Header
-    HeaderText.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    HeaderText.BackgroundColor3 = Color3.fromRGB(253, 251, 251)
     HeaderText.BackgroundTransparency = 1.000
     HeaderText.Position = UDim2.new(0, 0, -0.0020698905, 0)
     HeaderText.Size = UDim2.new(0, 206, 0, 33)
     HeaderText.ZIndex = 6 + zindex
     HeaderText.Font = Enum.Font.SourceSans
     HeaderText.Text = name or "Window"
-    HeaderText.TextColor3 = Color3.fromRGB(47, 54, 64)
+    HeaderText.TextColor3 = Color3.fromRGB(255, 255, 255)
     HeaderText.TextSize = 17.000
 
     local Minimise = Instance.new("TextButton")
     local Window = Instance.new("Frame")
     Minimise.Name = "Minimise"
     Minimise.Parent = Header
-    Minimise.BackgroundColor3 = Color3.fromRGB(0, 168, 255)
-    Minimise.BorderColor3 = Color3.fromRGB(0, 168, 255)
+    Minimise.BackgroundColor3 = Color3.fromRGB(98, 35, 201)
+    Minimise.BorderColor3 = Color3.fromRGB(98, 35, 201)
     Minimise.Position = UDim2.new(0, 185, 0, 2)
     Minimise.Size = UDim2.new(0, 22, 0, 22)
     Minimise.ZIndex = 7 + zindex
     Minimise.Font = Enum.Font.SourceSansLight
     Minimise.Text = "_"
-    Minimise.TextColor3 = Color3.fromRGB(0, 0, 0)
+    Minimise.TextColor3 = Color3.fromRGB(255, 255, 255)
     Minimise.TextSize = 20.000
     Minimise.MouseButton1Up:connect(function()
         Window.Visible = not Window.Visible
@@ -174,7 +170,7 @@ function library:Window(name)
     local functions = {}
     sizes[winCount] = 33
     listOffset[winCount] = 10
-    function functions:Button(name, callback)
+    function functions:button(name, callback)
         local name = name or "Button"
         local callback = callback or function() end
 
@@ -201,7 +197,7 @@ function library:Window(name)
 
         pastSliders[winCount] = false
     end
-    function functions:Label(text, color)
+    function functions:label(text, color)
         local color = color or Color3.fromRGB(220, 221, 225)
 
         sizes[winCount] = sizes[winCount] + 32
@@ -232,10 +228,8 @@ function library:Window(name)
             Label.TextColor3 = color
         end
         pastSliders[winCount] = false
-	
-	return Label
     end
-    function functions:Toggle(text, on, callback)
+    function functions:toggle(text, on, callback)
         local callback = callback or function() end
 
         sizes[winCount] = sizes[winCount] + 32
@@ -287,7 +281,7 @@ function library:Window(name)
         ToggleFiller.ZIndex = 2 + zindex
         pastSliders[winCount] = false
     end
-    function functions:Box(text, callback)
+    function functions:box(text, callback)
         local callback = callback or function() end
 
         sizes[winCount] = sizes[winCount] + 32
@@ -330,7 +324,7 @@ function library:Window(name)
         BoxDescription.ZIndex = 2 + zindex
         pastSliders[winCount] = false
     end
-    function functions:Slider(text, min, max, default, callback)
+    function functions:slider(text, min, max, default, callback)
         local text = text or "Slider"
         local min = min or 1
         local max = max or 100
@@ -474,18 +468,8 @@ function library:Window(name)
         Max.TextXAlignment = Enum.TextXAlignment.Right
         Max.ZIndex = 2 + zindex
         pastSliders[winCount] = true
-
-        local slider = {}
-        function slider:SetValue(value)
-	    value = math.clamp(value, min, max)
-            local xOffset = (value-min)/max * (Slider.Size.X.Offset)
-            SliderButton.Position = UDim2.new(0, xOffset , -1.33333337, 0);
-            SilderFiller.Size = UDim2.new(0, xOffset, 0, 6)
-            Current.Text = tostring(math.round(value))
-        end
-        return slider
     end
-    function functions:Dropdown(text, buttons, callback, selective)
+    function functions:dropdown(text, buttons, callback)
         local text = text or "Dropdown"
         local buttons = buttons or {}
         local callback = callback or function() end
@@ -558,7 +542,7 @@ function library:Window(name)
         table.insert(dropdowns, DropdownFrame)
         local dropFunctions = {}
         local canvasSize = 0
-        function dropFunctions:Button(name)
+        function dropFunctions:button(name)
             local name = name or ""
             local Button_2 = Instance.new("TextButton")
             Button_2.Name = "Button"
@@ -583,12 +567,9 @@ function library:Window(name)
             Button_2.MouseButton1Up:Connect(function()
                 callback(name)
 		DropdownFrame.Visible = false
-		if selective then
-		   Dropdown.Text = name
-		end
             end)
         end
-        function dropFunctions:Remove(name)
+        function dropFunctions:remove(name)
             local foundIt
             for i, v in pairs(DropdownFrame:GetChildren()) do
                 if foundIt then
@@ -610,12 +591,12 @@ function library:Window(name)
         end
 
         for i,v in pairs(buttons) do
-            dropFunctions:Button(v)
+            dropFunctions:button(v)
         end
 
         return dropFunctions
     end
-    function functions:ColorPicker(name, default, callback)
+    function functions:colorpicker(name, default, callback)
         local callback = callback or function() end
 
         local ColorPicker = Instance.new("TextButton")
