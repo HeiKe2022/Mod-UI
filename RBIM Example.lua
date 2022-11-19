@@ -1,8 +1,8 @@
-local engine = loadstring(game:HttpGet("https://raw.githubusercontent.com/Singularity5490/rbimgui-2/main/rbimgui-2.lua"))()
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Singularity5490/rbimgui-2/main/rbimgui-2.lua"))()
 
-local window1 = engine.new({
+local window1 = Library.new({
     text = "window 1",
-    size = UDim2.new(300, 200),
+    size = Vector2.new(300, 200),
 })
 
 window1.open()
