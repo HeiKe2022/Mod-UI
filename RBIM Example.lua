@@ -24,7 +24,7 @@ button1.event:Connect(function()
 end)
 
 local switch1 = tab1.new("switch", {
-    text = "swithc!";
+    text = "switch!";
 })
 switch1.set(true)
 switch1.event:Connect(function(bool)
