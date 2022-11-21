@@ -1,0 +1,70 @@
+local Library = loadstring(game:HttpGet("https://github.com/HeiKe2022/Mod-UI/raw/main/LegoHacks.lua"))()
+
+local Main = Library:CreateWindow("Getting Started!")
+
+Main:AddLabel({
+    text = "Label"
+})
+
+Main:AddButton({
+    text = "Button",
+    callback = function()
+        print("Button clicked!")
+    end
+})
+
+Main:AddToggle({
+    text = "Toggle",
+    state = false,
+    callback = function(State)
+        print(State)
+    end
+})
+
+Main:AddBind({
+    text = "bind",
+    key = Enum.KeyCode.A,
+    hold = false,
+    callback = function(State)
+        print("Key clicked!", State)
+    end
+})
+
+Main:AddSlider({
+    text = "Slider",
+    min = 0,
+    max = 100,
+    dual = true,
+    value = 5,
+    value2 = 10,
+    callback = function(Value)
+        print("Slider:", Value)
+    end
+})
+
+Main:AddList({
+    text = "Dropdown",
+    values = {"A", "B", "C"},
+    value = "B",
+    callback = function(Selected)
+        print("Option:", Selected)
+    end
+})
+
+Main:AddBox({
+    text = "Box",
+    value = "Default text",
+    callback = function(Value)
+        print("Input:", Value)
+    end
+})
+
+Main:AddColor({
+    text = "Colorpicker",
+    color = {255, 255, 255},
+    callback = function(Color)
+        print("Color:", Color)
+    end
+})
+
+Library:Init()
