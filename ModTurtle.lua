@@ -118,8 +118,8 @@ function library:window(name)
     local Header = Instance.new("Frame")
     Header.Name = "Header"
     Header.Parent = UiWindow
-    Header.BackgroundColor3 = Color3.fromRGB(98, 35, 201)
-    Header.BorderColor3 = Color3.fromRGB(98, 35, 201)
+    Header.BackgroundColor3 = Color3.fromRGB(47, 54, 64)
+    Header.BorderColor3 = Color3.fromRGB(47, 54, 64)
     Header.Position = UDim2.new(0, 0, -0.0202544238, 0)
     Header.Size = UDim2.new(0, 207, 0, 26)
     Header.ZIndex = 5 + zindex
@@ -141,8 +141,8 @@ function library:window(name)
     local Window = Instance.new("Frame")
     Minimise.Name = "Minimise"
     Minimise.Parent = Header
-    Minimise.BackgroundColor3 = Color3.fromRGB(98, 35, 201)
-    Minimise.BorderColor3 = Color3.fromRGB(98, 35, 201)
+    Minimise.BackgroundColor3 = Color3.fromRGB(47, 54, 64)
+    Minimise.BorderColor3 = Color3.fromRGB(47, 54, 64)
     Minimise.Position = UDim2.new(0, 185, 0, 2)
     Minimise.Size = UDim2.new(0, 22, 0, 22)
     Minimise.ZIndex = 7 + zindex
