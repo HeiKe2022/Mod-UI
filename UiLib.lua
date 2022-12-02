@@ -228,9 +228,7 @@ function library:window(name)
         end
         pastSliders[winCount] = false
     end
-    function functions:toggle(text, enabled, callback)
-        local text = text or "toggle"
-        local enabled = enabled or false
+    function functions:Toggle(text, on, callback)
         local callback = callback or function() end
 
         sizes[winCount] = sizes[winCount] + 32
