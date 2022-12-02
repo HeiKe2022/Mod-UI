@@ -282,12 +282,11 @@ function library:window(name)
         ToggleFiller.ZIndex = 2 + zindex
         pastSliders[winCount] = false
 		
-	local togglefunc = {}
+        local togglefunc = {}
         function togglefunc:SetState(State)
             ToggleFiller.Visible = State
             callback(ToggleFiller.Visible)
         end
- 
         function togglefunc:GetState()
             return ToggleFiller.Visible
         end
