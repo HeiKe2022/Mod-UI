@@ -228,7 +228,7 @@ function library:window(name)
         end
         pastSliders[winCount] = false
     end
-    function functions:Toggle(text, on, callback)
+    function functions:toggle(text, on, callback)
         local callback = callback or function() end
 
         sizes[winCount] = sizes[winCount] + 32
