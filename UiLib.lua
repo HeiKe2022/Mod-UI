@@ -272,16 +272,18 @@ function library:window(name)
             callback(ToggleFiller.Visible)
         end)
 
-        local ToggleFunc = {}
-        function ToggleFunc:SetState(State)
+        local togglefunc = {}
+
+        function togglefunc:SetState(State)
             ToggleFiller.Visible = State
-            Callback(ToggleFiller.Visible)
-            function togglefunc:GetState()
-                return ToggleFiller.Visible
-            end
-            return ToggleFunc
+            callback(ToggleFiller.Visible)
         end
 
+        function togglefunc:GetState()
+            return ToggleFiller.Visible
+        end
+        return togglefunc
+    end
         ToggleFiller.Name = "ToggleFiller"
         ToggleFiller.Parent = ToggleButton
         ToggleFiller.BackgroundColor3 = Color3.fromRGB(68, 189, 50)
