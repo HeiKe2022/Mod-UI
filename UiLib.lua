@@ -291,8 +291,7 @@ function library:window(name)
         function togglefunc:GetState()
             return ToggleFiller.Visible
         end
- 
-        return togglefunc
+        return State
     end
     function functions:box(text, callback)
         local callback = callback or function() end
