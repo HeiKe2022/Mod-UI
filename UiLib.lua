@@ -1,14 +1,14 @@
-local library = {}
-local windowCount = 0
 local sizes = {}
-local listOffset = {}
+local library = {}
 local windows = {}
-local pastSliders = {}
 local dropdowns = {}
-local dropdownSizes = {}
-local destroyed
-
+local listOffset = {}
+local pastSliders = {}
 local colorPickers = {}
+local dropdownSizes = {}
+
+local destroyed
+local windowCount = 0
 
 if game.CoreGui:FindFirstChild('UiLib') then
     game.CoreGui:FindFirstChild('UiLib'):Destroy()
@@ -19,56 +19,55 @@ function Lerp(a, b, c)
     return a + ((b - a) * c)
 end
 
-local players = game:service('Players');
-local player = players.LocalPlayer;
-local mouse = player:GetMouse();
-local run = game:service('RunService');
-local stepped = run.Stepped;
+local players = game:service('Players')
+local player = players.LocalPlayer
+local mouse = player:GetMouse()
+local run = game:service('RunService')
+local stepped = run.Stepped
 function Dragify(obj)
 	spawn(function()
-		local minitial;
-		local initial;
-		local isdragging;
+		local minitial
+		local initial
+		local isdragging
 	    obj.InputBegan:Connect(function(input)
 			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-				isdragging = true;
-				minitial = input.Position;
-				initial = obj.Position;
-				local con;
+				isdragging = true
+				minitial = input.Position
+				initial = obj.Position
+				local con
                 con = stepped:Connect(function()
         			if isdragging then
-						local delta = Vector3.new(mouse.X, mouse.Y, 0) - minitial;
-						obj.Position = UDim2.new(initial.X.Scale, initial.X.Offset + delta.X, initial.Y.Scale, initial.Y.Offset + delta.Y);
+						local delta = Vector3.new(mouse.X, mouse.Y, 0) - minitial
+						obj.Position = UDim2.new(initial.X.Scale, initial.X.Offset + delta.X, initial.Y.Scale, initial.Y.Offset + delta.Y)
 					else
-						con:Disconnect();
-					end;
-                end);
+						con:Disconnect()
+					end
+                end)
                 input.Changed:Connect(function()
     			    if input.UserInputState == Enum.UserInputState.End then
-					    isdragging = false;
-				    end;
-			    end);
-		end;
-	end);
-end)
+					    isdragging = false
+				    end
+			    end)
+            end
+        end)
+    end)
 end
 
 -- Instances:
 
 local function protect_gui(obj) 
-if destroyed then
-   obj.Parent = game.CoreGui
-   return
+    if destroyed then
+        obj.Parent = game.CoreGui
+    return
+    end
+    if syn and syn.protect_gui then
+        syn.protect_gui(obj)
+        obj.Parent = game.CoreGui
+    else
+        obj.Parent = game.CoreGui
+    end
 end
-if syn and syn.protect_gui then
-syn.protect_gui(obj)
-obj.Parent = game.CoreGui
-elseif PROTOSMASHER_LOADED then
-obj.Parent = get_hidden_gui()
-else
-obj.Parent = game.CoreGui
-end
-end
+
 local UiLib = Instance.new("ScreenGui")
 
 UiLib.Name = "UiLib"
@@ -229,7 +228,9 @@ function library:window(name)
         end
         pastSliders[winCount] = false
     end
-    function functions:toggle(text, on, callback)
+    function functions:toggle(text, enabled, callback)
+        local text = text or "toggle"
+        local enabled = enabled or false
         local callback = callback or function() end
 
         sizes[winCount] = sizes[winCount] + 32
@@ -270,6 +271,16 @@ function library:window(name)
             ToggleFiller.Visible = not ToggleFiller.Visible
             callback(ToggleFiller.Visible)
         end)
+
+        local ToggleFunc = {}
+        function ToggleFunc:SetState(State)
+            ToggleFiller.Visible = State
+            Callback(ToggleFiller.Visible)
+            function togglefunc:GetState()
+                return ToggleFiller.Visible
+            end
+            return ToggleFunc
+        end
 
         ToggleFiller.Name = "ToggleFiller"
         ToggleFiller.Parent = ToggleButton
@@ -356,11 +367,11 @@ function library:window(name)
 
         function SliderMovement(input)
             if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                isdragging = true;
-                    minitial = input.Position.X;
-                    initial = SliderButton.Position.X.Offset;
+                isdragging = true
+                    minitial = input.Position.X
+                    initial = SliderButton.Position.X.Offset
                     local delta1 = SliderButton.AbsolutePosition.X - initial
-                    local con;
+                    local con
                     con = stepped:Connect(function()
                         if isdragging then
                             local xOffset = mouse.X - delta1 - 3
@@ -369,20 +380,20 @@ function library:window(name)
                             elseif xOffset< 0 then
                                 xOffset = 0
                             end
-                            SliderButton.Position = UDim2.new(0, xOffset , -1.33333337, 0);
+                            SliderButton.Position = UDim2.new(0, xOffset , -1.33333337, 0)
                             SilderFiller.Size = UDim2.new(0, xOffset, 0, 6)
                             local value = Lerp(min, max, SliderButton.Position.X.Offset/(Slider.Size.X.Offset-5))
                             Current.Text = tostring(math.round(value))
                         else
-                            con:Disconnect();
-                        end;
-                    end);
+                            con:Disconnect()
+                        end
+                    end)
                     input.Changed:Connect(function()
                         if input.UserInputState == Enum.UserInputState.End then
-                            isdragging = false;
-                        end;
-                    end);
-            end;
+                            isdragging = false
+                        end
+                    end)
+            end
         end
         function SliderEnd(input)
             if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
@@ -741,7 +752,6 @@ function library:window(name)
         local hue = 0
         local sat = 1
         local brightness = 1
-        
         local con
 
         ToggleRGB.MouseButton1Down:Connect(function()
@@ -789,7 +799,7 @@ function library:window(name)
             if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                 local initial = Vector2.new(Cursor.Position.X.Offset, Cursor.Position.Y.Offset)
                 local delta = Cursor.AbsolutePosition - initial
-                local con;
+                local con
                 local isdragging = true
 
                 con = stepped:Connect(function()
@@ -807,16 +817,16 @@ function library:window(name)
                         ColorPicker.BackgroundColor3 = color3
                         callback(color3)
 					else
-						con:Disconnect();
-					end;
-                end);
+						con:Disconnect()
+					end
+                end)
                 input.Changed:Connect(function()
     			    if input.UserInputState == Enum.UserInputState.End then
-					    isdragging = false;
-				    end;
-			    end);
-		    end;
-	    end);
+					    isdragging = false
+				    end
+			    end)
+		    end
+	    end)
 
         Color.Name = "Color"
         Color.Parent = ColorPickerFrame
@@ -828,18 +838,18 @@ function library:window(name)
         Color.InputBegan:Connect(function(input)
             if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                 draggingColor = true
-                local initial2 = ColorSlider.Position.X.Offset;
+                local initial2 = ColorSlider.Position.X.Offset
                 local delta1 = ColorSlider.AbsolutePosition.X - initial2
                 local con
                 con = stepped:Connect(function()
                 if draggingColor then
-                    -- gets the position of the mouse on the color thing and divides it by its size, whcih will give u the hue
+                    -- gets the position of the mouse on the color thing and divides it by its size, which will give u the hue
                     local colorPosition, colorSize = Color.AbsolutePosition, Color.AbsoluteSize
                     hue = 1 - math.clamp(1 - ((mouse.X - colorPosition.X) / colorSize.X), 0, 1)
                     CanvasGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromHSV(hue, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 255, 255))}
 
                     local xOffset = math.clamp(mouse.X - delta1, 0, Color.Size.X.Offset - 3)
-                    ColorSlider.Position = UDim2.new(0, xOffset, 0, 0);
+                    ColorSlider.Position = UDim2.new(0, xOffset, 0, 0)
 
                     color3 = Color3.fromHSV(hue, sat, brightness)
                     ColorPicker.BackgroundColor3  = color3
@@ -912,9 +922,8 @@ function library:window(name)
                 end)
 	        end
 	    end
-	return colorFuncs
+	    return colorFuncs
     end
-
     return functions
 end
 
