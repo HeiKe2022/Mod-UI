@@ -272,14 +272,7 @@ function library:window(name)
             callback(ToggleFiller.Visible)
         end)
 
-        local togglefunc = {}
-        function togglefunc:SetState(State)
-            ToggleFiller.Visible = State
-            callback(ToggleFiller.Visible)
-            return togglefunc
-        end
-  
-        ToggleFiller.Name = "ToggleFiller"
+	ToggleFiller.Name = "ToggleFiller"
         ToggleFiller.Parent = ToggleButton
         ToggleFiller.BackgroundColor3 = Color3.fromRGB(68, 189, 50)
         ToggleFiller.BorderColor3 = Color3.fromRGB(47, 54, 64)
@@ -288,6 +281,18 @@ function library:window(name)
         ToggleFiller.Visible = on
         ToggleFiller.ZIndex = 2 + zindex
         pastSliders[winCount] = false
+		
+	local togglefunc = {}
+        function togglefunc:SetState(State)
+            ToggleFiller.Visible = State
+            callback(ToggleFiller.Visible)
+        end
+ 
+        function togglefunc:GetState()
+            return ToggleFiller.Visible
+        end
+ 
+        return togglefunc
     end
     function functions:box(text, callback)
         local callback = callback or function() end
