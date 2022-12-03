@@ -19,10 +19,10 @@ local ColorPickers = {}
 -- Variables
 local Mouse = Players.LocalPlayer:GetMouse()
 
--- [[Instance
+-- Instance
 pcall(function()
     OldInstance:Destroy()
-end)]]
+end)
 
 local NewInstance = Instance.new("ScreenGui")
 NewInstance.Name = HttpService:GenerateGUID(false)
@@ -36,7 +36,7 @@ else
 	NewInstance.Parent = CoreGui
 end
 
--- getgenv().OldInstance = NewInstance
+getgenv().OldInstance = NewInstance
 
 local XOffset = 20
 
