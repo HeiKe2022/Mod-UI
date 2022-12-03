@@ -97,8 +97,8 @@ function Library:Window(WindowText)
 
     local Header = Instance.new("Frame")
     Header.Name = "Header"
-    Header.BackgroundColor3 = Color3.fromRGB(255, 250, 250)
-    Header.BorderColor3 = Color3.fromRGB(255, 250, 250)
+    Header.BackgroundColor3 = Color3.fromRGB(255, 187, 109)
+    Header.BorderColor3 = Color3.fromRGB(255, 187, 109)
     Header.Position = UDim2.new(0, 0, -0.0202544238, 0)
     Header.Size = UDim2.new(0, 207, 0, 33)
     Header.ZIndex = 5 + ZIndex
