@@ -1,3 +1,5 @@
+-- Original UI credit to mirofinland @ v3rm
+-- Added features and func credit to arChEmiT @ v3rm
 -- Services
 local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
@@ -13,7 +15,6 @@ local ListOffset = {}
 local PastSliders = {}
 local Dropdowns = {}
 local ColorPickers = {}
-
 
 -- Variables
 local Mouse = Players.LocalPlayer:GetMouse()
@@ -84,8 +85,8 @@ function Library:Window(WindowText)
     local ZIndex = WindowCount * 7
 
     local UIWindow = Instance.new("Frame")
-    UIWindow.BackgroundColor3 = Color3.fromRGB(47, 54, 64)
-    UIWindow.BorderColor3 = Color3.fromRGB(47, 54, 64)
+    UIWindow.BackgroundColor3 = Color3.fromRGB(0, 151, 230)
+    UIWindow.BorderColor3 = Color3.fromRGB(0, 151, 230)
     UIWindow.Position = UDim2.new(0, XOffset, 0, 20)
     UIWindow.Size = UDim2.new(0, 207, 0, 33)
     UIWindow.ZIndex = 4 + ZIndex
@@ -97,10 +98,10 @@ function Library:Window(WindowText)
 
     local Header = Instance.new("Frame")
     Header.Name = "Header"
-    Header.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    Header.BorderColor3 = Color3.fromRGB(255, 255, 255)
+    Header.BackgroundColor3 = Color3.fromRGB(0, 168, 255)
+    Header.BorderColor3 = Color3.fromRGB(0, 168, 255)
     Header.Position = UDim2.new(0, 0, -0.0202544238, 0)
-    Header.Size = UDim2.new(0, 207, 0, 33)
+    Header.Size = UDim2.new(0, 207, 0, 26)
     Header.ZIndex = 5 + ZIndex
     Header.Parent = UIWindow
 
@@ -129,7 +130,7 @@ function Library:Window(WindowText)
     local Minimise = Instance.new("TextButton")
     Minimise.Name = "Minimise"
     Minimise.Parent = Header
-    Minimise.BackgroundTransparency = 0.9
+    Minimise.BackgroundTransparency = 1
     Minimise.BackgroundColor3 = Color3.fromRGB(0, 168, 255)
     Minimise.BorderColor3 = Color3.fromRGB(0, 168, 255)
     Minimise.Position = UDim2.new(0, 185, 0, 2)
@@ -177,6 +178,7 @@ function Library:Window(WindowText)
                 while NewInstance.Parent do
                     local Hue = tick() % 5 / 5
                     Label.TextColor3 = Color3.fromHSV(Hue, 1, 1)
+                    task.wait()
                 end
             end)
         else
@@ -1279,13 +1281,14 @@ end
 function Library:Settings()
     local Settings = Library:Window("Settings")
 
+    Settings:Bind("Hide UI", Enum.KeyCode.LeftControl, false, function(State)
+        NewInstance.Enabled = State
+    end)
+
     Settings:Button("Destroy UI", function()
         NewInstance:Destroy()
     end)
 
-    Settings:Bind("Hide UI", Enum.KeyCode.LeftControl, false, function(State)
-        NewInstance.Enabled = State
-    end)
 end
 
 return Library
