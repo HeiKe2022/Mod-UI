@@ -1,0 +1,69 @@
+local Library = loadstring(game:HttpGet("https://bitbucket.org/cat__/uis/raw/df20a756cb4a1f2ee628bd02c4b9fb728ab13a58/Turtle%20UI.lua"))()
+
+Library:Window(Title <string>)
+Library:Destroy(<void>)
+Library:Hide(<void>)
+Library:Keybind(Key <string>)
+----------------------------------
+Window:Label(Text <string>, Color <boolean/Color3>)
+
+Label:SetText(Text <string>)
+Label:GetText(<void>)
+Label:SetVisible(State <boolean>)
+Label:GetVisible(<void>)
+----------------------------------
+Window:Button(Text <string>, Callback[Func] <function>)
+
+Button:SetText(Text <string>)
+Button:GetText(<void>)
+Button:SetVisible(State <boolean>)
+Button:GetVisible(<void>)
+Button:Click(<void>)
+----------------------------------
+Window:Toggle(Text <string>, Enabled <boolean>, Callback[State, Func] <function>)
+
+Toggle:SetText(Text <string>)
+Toggle:GetText(<void>)
+Toggle:SetState(State <boolean>)
+Toggle:GetState(<void>)
+Toggle:SetVisible(State <boolean>)
+Toggle:GetVisible(<void>)
+----------------------------------
+Window:Box(Title <string>, Callback[Text, IsFocus, Func] <function>)
+
+Box:SetText(Type[Title, Text] <string>, Text <string>)
+Box:GetText(Type[Title, Text] <string>)
+Box:SetVisible(State <boolean>)
+Box:GetVisible(<void>)
+Box:GetPlayer(Target <string>)
+----------------------------------
+Window:Slider(Text <string>, Min <number>, Max <number>, Default <number>, Callback[Value, Func] <function>)
+
+Slider:SetText(Text <string>)
+Slider:GetText(<void>)
+Slider:SetValue(Value <number>)
+Slider:GetValue(<void>)
+Slider:SetVisible(State <boolean>)
+Slider:GetVisible(<void>)
+----------------------------------
+Window:Dropdown(Text <string>, List <table>, Callback[Selected] <function>, Selective <boolean>)
+
+Dropdown:Button(Text <string?>)
+Dropdown:Remove(Text <string?>)
+----------------------------------
+Window:ColorPicker(Text <string>, Default <boolean/Color3>, Callback[Color, Func] <function>)
+
+ColorPicker:UpdateColorPicker(Color <boolean/Color3>)
+ColorPicker:SetVisible(State <boolean>)
+ColorPicker:GetVisible(<void>)
+----------------------------------
+Window:Bind(Text <string>, Bind <EnumItem>, Enabled <boolean>, Callback[State, Func] <function>)
+
+Bind:SetText(Text <string>)
+Bind:GetText(<void>)
+Bind:SetState(State <boolean>)
+Bind:GetState(<void>)
+Bind:SetBind(Bind <string/EnumItem>)
+Bind:GetBind(<void>)
+Bind:SetVisible(State <boolean>)
+Bind:GetVisible(<void>)
