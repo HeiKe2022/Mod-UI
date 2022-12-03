@@ -100,7 +100,7 @@ function Library:Window(WindowText)
     Header.BackgroundColor3 = Color3.fromRGB(255, 250, 250)
     Header.BorderColor3 = Color3.fromRGB(255, 250, 250)
     Header.Position = UDim2.new(0, 0, -0.0202544238, 0)
-    Header.Size = UDim2.new(0, 207, 0, 26)
+    Header.Size = UDim2.new(0, 207, 0, 33)
     Header.ZIndex = 5 + ZIndex
     Header.Parent = UIWindow
 
