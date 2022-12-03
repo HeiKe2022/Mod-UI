@@ -1,5 +1,3 @@
--- Original UI credit to mirofinland @ v3rm
--- Added features and func credit to arChEmiT @ v3rm
 -- Services
 local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
@@ -41,7 +39,7 @@ getgenv().OldInstance = NewInstance
 local XOffset = 20
 
 function Lerp(a, b, c)
-    return a + ((b -a) * c)
+    return a + ((b - a) * c)
 end
 
 function Dragify(Obj)
@@ -77,16 +75,20 @@ function Dragify(Obj)
 end
 
 -- Elements
-function Library:Window(WindowText)
-    WindowText = WindowText
+function Library:Window(WindowText, FrameColor, HeaderColor, TextColor)
+    WindowText = WindowText or "Turtle UI"
+    FrameColor = FrameColor or Color3.fromRGB(0, 151, 230)
+    HeaderColor = HeaderColor or Color3.fromRGB(0, 168, 255)
+    TextColor = TextColor or Color3.fromRGB(47, 54, 64)
+
     WindowCount = WindowCount + 1
 
     local WinCount = WindowCount
     local ZIndex = WindowCount * 7
 
     local UIWindow = Instance.new("Frame")
-    UIWindow.BackgroundColor3 = Color3.fromRGB(0, 151, 230)
-    UIWindow.BorderColor3 = Color3.fromRGB(0, 151, 230)
+    UIWindow.BackgroundColor3 = FrameColor
+    UIWindow.BorderSizePixel = 0
     UIWindow.Position = UDim2.new(0, XOffset, 0, 20)
     UIWindow.Size = UDim2.new(0, 207, 0, 33)
     UIWindow.ZIndex = 4 + ZIndex
@@ -98,8 +100,8 @@ function Library:Window(WindowText)
 
     local Header = Instance.new("Frame")
     Header.Name = "Header"
-    Header.BackgroundColor3 = Color3.fromRGB(0, 168, 255)
-    Header.BorderColor3 = Color3.fromRGB(0, 168, 255)
+    Header.BackgroundColor3 = HeaderColor
+    Header.BorderSizePixel = 0
     Header.Position = UDim2.new(0, 0, -0.0202544238, 0)
     Header.Size = UDim2.new(0, 207, 0, 26)
     Header.ZIndex = 5 + ZIndex
@@ -114,7 +116,7 @@ function Library:Window(WindowText)
     HeaderText.ZIndex = 6 + ZIndex
     HeaderText.Font = Enum.Font.SourceSans
     HeaderText.Text = WindowText
-    HeaderText.TextColor3 = Color3.fromRGB(47, 54, 64)
+    HeaderText.TextColor3 = TextColor
     HeaderText.TextSize = 17.000
     HeaderText.Parent = Header
 
@@ -130,19 +132,17 @@ function Library:Window(WindowText)
     local Minimise = Instance.new("TextButton")
     Minimise.Name = "Minimise"
     Minimise.Parent = Header
-    Minimise.BackgroundTransparency = 0.96
-    Minimise.BackgroundColor3 = Color3.fromRGB(0, 168, 255)
-    Minimise.BorderColor3 = Color3.fromRGB(0, 168, 255)
+    Minimise.BackgroundTransparency = 1
     Minimise.Position = UDim2.new(0, 185, 0, 2)
     Minimise.Size = UDim2.new(0, 22, 0, 22)
     Minimise.ZIndex = 7 + ZIndex
     Minimise.Font = Enum.Font.SourceSansLight
-    Minimise.Text = "_"
-    Minimise.TextColor3 = Color3.fromRGB(0, 0, 0)
+    Minimise.Text = "-"
+    Minimise.TextColor3 = TextColor
     Minimise.TextSize = 20.000
     Minimise.MouseButton1Down:Connect(function()
         Window.Visible = not Window.Visible
-        Minimise.Text = Window.Visible and "_" or "+"
+        Minimise.Text = Window.Visible and "-" or "+"
     end)
 
     local Functions = {}
@@ -1092,8 +1092,6 @@ function Library:Window(WindowText)
                     end
                 end)
             end
-
-            print("Clicked")
         end)
 
         if Default and typeof(Default) == "boolean" then
@@ -1278,17 +1276,22 @@ function Library:Window(WindowText)
     return Functions
 end
 
-function Library:Settings()
-    local Settings = Library:Window("Settings")
+function Library:Settings(Bind, FrameColor, HeaderColor, TextColor)
+    Bind = Bind or Enum.KeyCode.LeftControl
 
-    Settings:Bind("Hide UI", Enum.KeyCode.LeftControl, false, function(State)
+    if typeof(Bind) == "string" then
+        Bind = Enum.KeyCode[Bind]
+    end
+
+    local Settings = Library:Window("Settings", FrameColor, HeaderColor, TextColor)
+
+    Settings:Bind("Hide UI", Bind, false, function(State)
         NewInstance.Enabled = State
     end)
 
     Settings:Button("Destroy UI", function()
         NewInstance:Destroy()
     end)
-
 end
 
 return Library
