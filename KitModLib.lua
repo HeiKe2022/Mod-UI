@@ -84,10 +84,10 @@ function Library:Window(WindowText)
     local ZIndex = WindowCount * 7
 
     local UIWindow = Instance.new("Frame")
-    UIWindow.BackgroundColor3 = Color3.fromRGB(0, 151, 230)
-    UIWindow.BorderColor3 = Color3.fromRGB(0, 151, 230)
+    UIWindow.BackgroundColor3 = Color3.fromRGB(47, 54, 64)
+    UIWindow.BorderColor3 = Color3.fromRGB(47, 54, 64)
     UIWindow.Position = UDim2.new(0, XOffset, 0, 20)
-    UIWindow.Size = UDim2.new(0, 207, 0, 33)
+    UIWindow.Size = UDim2.new(0, 207, 0, 28)
     UIWindow.ZIndex = 4 + ZIndex
     UIWindow.Active = true
     UIWindow.Parent = NewInstance
@@ -97,8 +97,8 @@ function Library:Window(WindowText)
 
     local Header = Instance.new("Frame")
     Header.Name = "Header"
-    Header.BackgroundColor3 = Color3.fromRGB(0, 168, 255)
-    Header.BorderColor3 = Color3.fromRGB(0, 168, 255)
+    Header.BackgroundColor3 = Color3.fromRGB(255,250,250)
+    Header.BorderColor3 = Color3.fromRGB(255,250,250)
     Header.Position = UDim2.new(0, 0, -0.0202544238, 0)
     Header.Size = UDim2.new(0, 207, 0, 26)
     Header.ZIndex = 5 + ZIndex
