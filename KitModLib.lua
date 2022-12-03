@@ -130,7 +130,7 @@ function Library:Window(WindowText)
     local Minimise = Instance.new("TextButton")
     Minimise.Name = "Minimise"
     Minimise.Parent = Header
-    Minimise.BackgroundTransparency = 1
+    Minimise.BackgroundTransparency = 0.96
     Minimise.BackgroundColor3 = Color3.fromRGB(0, 168, 255)
     Minimise.BorderColor3 = Color3.fromRGB(0, 168, 255)
     Minimise.Position = UDim2.new(0, 185, 0, 2)
