@@ -77,7 +77,7 @@ end
 
 -- Elements
 function Library:Window(WindowText)
-    WindowText = WindowText or "Turtle UI"
+    WindowText = WindowText
     WindowCount = WindowCount + 1
 
     local WinCount = WindowCount
