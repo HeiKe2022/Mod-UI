@@ -1,5 +1,4 @@
 -- Services
-local Debris = game:GetService("Debris")
 local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
 local RunService = game:GetService("RunService")
@@ -39,7 +38,6 @@ end
 getgenv().OldInstance = NewInstance
 
 local XOffset = 20
-local KeybindConnection
 
 function Lerp(a, b, c)
     return a + ((b -a) * c)
@@ -74,30 +72,6 @@ function Dragify(Obj)
                 end)
             end
         end)
-    end)
-end
-
-function Library:Destroy()
-    NewInstance:Destroy()
-
-    if KeybindConnection then
-        KeybindConnection:Disconnect()
-    end
-end
-
-function Library:Hide()
-    NewInstance.Enabled = not NewInstance.Enabled
-end
-
-function Library:Keybind(Key)
-    if KeybindConnection then
-        KeybindConnection:Disconnect()
-    end
-
-    KeybindConnection = UserInputService.InputBegan:Connect(function(Input, GameProcessedEvent)
-        if not GameProcessedEvent and Input.KeyCode == Enum.KeyCode[Key] then
-            Library:Hide()
-        end
     end)
 end
 
@@ -1300,3 +1274,17 @@ function Library:Window(WindowText)
 
     return Functions
 end
+
+function Library:Settings()
+    local Settings = Library:Window("Settings")
+
+    Settings:Button("Destroy UI", function()
+        NewInstance:Destroy()
+    end)
+
+    Settings:Bind("Hide UI", Enum.KeyCode.LeftControl, false, function(State)
+        NewInstance.Enabled = State
+    end)
+end
+
+return Library
