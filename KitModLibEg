@@ -1,6 +1,6 @@
 local Library = loadstring(game:HttpGet("https://bitbucket.org/cat__/uis/raw/main/Turtle%20UI.lua"))()
 
-local Main = Library:Window("Main")
+local Main = Library:Window("Main", FrameColor, HeaderColor, TextColor)
 Library:Settings()
 
 Main:Label("Label")
