@@ -74,6 +74,16 @@ function Dragify(Obj)
     end)
 end
 
+function CheckBind(Key)
+    for _,v in ipairs(Enum.KeyCode:GetEnumItems()) do
+        if v.Name == Key then
+            return true
+        end
+    end
+
+    return false
+end
+
 -- Elements
 function Library:Window(WindowText, FrameColor, HeaderColor, TextColor)
     WindowText = WindowText or "Turtle UI"
@@ -260,11 +270,11 @@ function Library:Window(WindowText, FrameColor, HeaderColor, TextColor)
         return Func
     end
 
-    function Functions:Toggle(ToggleText, Enabled, Callback, Data)
+    function Functions:Toggle(ToggleText, Enabled, Callback, Disable)
         ToggleText = ToggleText or "Toggle"
         Enabled = Enabled or false
         Callback = Callback or function() end
-        Data = Data or false
+        Disable = Disable or true
 
         Sizes[WinCount] = Sizes[WinCount] + 32
         ListOffset[WinCount] = ListOffset[WinCount] + 32
@@ -319,7 +329,7 @@ function Library:Window(WindowText, FrameColor, HeaderColor, TextColor)
         local Connection
         Connection = NewInstance:GetPropertyChangedSignal("Parent"):Connect(function()
             if not NewInstance.Parent then
-                if Enabled and not Data then
+                if Enabled and Disable then
                     Enabled = false
                     pcall(Callback, Enabled, Func)
                     Connection:Disconnect()
@@ -369,6 +379,10 @@ function Library:Window(WindowText, FrameColor, HeaderColor, TextColor)
         Bind = Bind or Enum.KeyCode.A
         Enabled = Enabled or false
         Callback = Callback or function() end
+
+        if typeof(Bind) == "string" and CheckBind(Bind) then
+            Bind = Enum.KeyCode[Bind]
+        end
 
         Sizes[WinCount] = Sizes[WinCount] + 32
         ListOffset[WinCount] = ListOffset[WinCount] + 32
@@ -449,7 +463,7 @@ function Library:Window(WindowText, FrameColor, HeaderColor, TextColor)
         end
 
         function Func:SetBind(Value)
-           KeyCode = (typeof(Value) == "string" and Value or typeof(Value) == "EnumItem" and Value.Name) or KeyCode
+           KeyCode = ((typeof(Value) == "string" and CheckBind(Value)) and Value) or (typeof(Value) == "EnumItem" and Value.Name) or KeyCode
            BindButton.Text = KeyCode
         end
 
@@ -788,6 +802,7 @@ function Library:Window(WindowText, FrameColor, HeaderColor, TextColor)
         DropText = DropText or "Dropdown"
         List = List or {}
         Callback = Callback or function() end
+        Selective = Selective or false
 
         Sizes[WinCount] = Sizes[WinCount] + 32
         ListOffset[WinCount] = ListOffset[WinCount] + 32
@@ -1273,25 +1288,25 @@ function Library:Window(WindowText, FrameColor, HeaderColor, TextColor)
         return Func
     end
 
-    return Functions
-end
-
-function Library:Settings(Bind, FrameColor, HeaderColor, TextColor)
-    Bind = Bind or Enum.KeyCode.LeftControl
-
-    if typeof(Bind) == "string" then
-        Bind = Enum.KeyCode[Bind]
+    function Functions:DestroyUI()
+        Functions:Button("Destroy UI", function()
+            NewInstance:Destroy()
+        end)
     end
 
-    local Settings = Library:Window("Settings", FrameColor, HeaderColor, TextColor)
+    function Functions:HideUI(Bind)
+        Bind = Bind or Enum.KeyCode.LeftControl
 
-    Settings:Bind("Hide UI", Bind, false, function(State)
-        NewInstance.Enabled = State
-    end)
+        if typeof(Bind) == "string" and CheckBind(Bind) then
+            Bind = Enum.KeyCode[Bind]
+        end
 
-    Settings:Button("Destroy UI", function()
-        NewInstance:Destroy()
-    end)
+        Functions:Bind("Hide UI", Bind, false, function(State)
+            NewInstance.Enabled = State
+        end)
+    end
+
+    return Functions
 end
 
 return Library
