@@ -113,8 +113,8 @@ function Library:Window(_Window, ...)
 
     Arg.Title = (Arg.Title or Arg[1]) or "Turtle UI"
     Arg.FrameColor = (Arg.FrameColor or Arg[2]) or Color3.fromRGB(0, 151, 230)
-    Arg.HeaderColor = (Arg.HeaderColor or Arg[3]) or Color3.fromRGB(0, 168, 255)
-    Arg.TextColor = (Arg.TextColor or Arg[4]) or Color3.fromRGB(47, 54, 64)
+    Arg.BackgroundColor = (Arg.BackgroundColor or Arg[3]) or Color3.fromRGB(47, 54, 64)
+    Arg.TextColor = (Arg.TextColor or Arg[4]) or Color3.fromRGB(100, 100, 100)
 
     Arg.Font = (Arg.Font and CheckEnum(Enum.Font, Arg.Font)) or Enum.Font.SourceSans
     Arg.TextSize = Arg.TextSize or 17
@@ -139,7 +139,7 @@ function Library:Window(_Window, ...)
 
     local Header = Instance.new("Frame")
     Header.Name = "Header"
-    Header.BackgroundColor3 = Arg.HeaderColor
+    Header.BackgroundColor3 = Arg.FrameColor
     Header.BorderSizePixel = 0
     Header.Position = UDim2.new(0, 0, -0.0202544238, 0)
     Header.Size = UDim2.new(0, 207, 0, 26)
@@ -148,7 +148,7 @@ function Library:Window(_Window, ...)
 
     local HeaderText = Instance.new("TextLabel")
     HeaderText.Name = "HeaderText"
-    HeaderText.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    HeaderText.BackgroundColor3 = Arg.FrameColor
     HeaderText.BackgroundTransparency = 1.000
     HeaderText.Position = UDim2.new(0, 0, -0.0020698905, 0)
     HeaderText.Size = UDim2.new(0, 206, 0, 33)
@@ -161,8 +161,8 @@ function Library:Window(_Window, ...)
 
     local Window = Instance.new("Frame")
     Window.Name = "Window"
-    Window.BackgroundColor3 = Color3.fromRGB(47, 54, 64)
-    Window.BorderColor3 = Color3.fromRGB(47, 54, 64)
+    Window.BackgroundColor3 = Arg.BackgroundColor
+    Window.BorderColor3 = Arg.BackgroundColor
     Window.Position = UDim2.new(0, 0, 0, 0)
     Window.Size = UDim2.new(0, 207, 0, 33)
     Window.ZIndex = 1 + ZIndex
@@ -225,12 +225,12 @@ function Library:Window(_Window, ...)
 
         local MouseEnter
         MouseEnter = Label.MouseEnter:Connect(function()
-            pcall(Args.MouseEnter, Func, MouseEnter)
+            Args.MouseEnter(Func, MouseEnter)
         end)
 
         local MouseLeave
         MouseLeave = Label.MouseLeave:Connect(function()
-            pcall(Args.MouseLeave, Func, MouseLeave)
+            Args.MouseLeave(Func, MouseLeave)
         end)
 
         if typeof(Args.TextColor) == "boolean" and Args.TextColor then
@@ -299,7 +299,7 @@ function Library:Window(_Window, ...)
 
         local Button = Instance.new("TextButton")
         Button.Name = "Button"
-        Button.BackgroundColor3 = Color3.fromRGB(53, 59, 72)
+        Button.BackgroundColor3 = Arg.FrameColor
         Button.BorderColor3 = Color3.fromRGB(113, 128, 147)
         Button.Position = UDim2.new(0, 12, 0, ListOffset[WinCount])
         Button.Size = UDim2.new(0, 182, 0, 26)
@@ -313,13 +313,13 @@ function Library:Window(_Window, ...)
         Button.Text = Args.Text
         Button.Parent = Window
         Button.MouseButton1Down:Connect(function()
-            pcall(Args.Callback, Func)
+            Args.Callback(Func)
         end)
 
         PastSliders[WinCount] = false
 
         function Func:Click()
-            pcall(Args.Callback, Func)
+            Args.Callback(Func)
         end
 
         return setmetatable(Func, {
@@ -367,14 +367,12 @@ function Library:Window(_Window, ...)
         Args.Font = Args.Font and CheckEnum(Enum.Font, Args.Font) or Enum.Font.SourceSans
         Args.TextSize = Args.TextSize or 16
         Args.TextColor = Args.TextColor or Color3.fromRGB(245, 246, 250)
-        Args.Condition = Args.Condition or function() end
 
         Sizes[WinCount] = Sizes[WinCount] + 32
         ListOffset[WinCount] = ListOffset[WinCount] + 32
         Window.Size = UDim2.new(0, 207, 0, Sizes[WinCount] + 10)
 
         local Func = {}
-        local ChangedEvent
 
         local ToggleDescription = Instance.new("TextLabel")
         ToggleDescription.Name = "ToggleDescription"
@@ -402,7 +400,7 @@ function Library:Window(_Window, ...)
 
         local ToggleButton = Instance.new("TextButton")
         ToggleButton.Name = "ToggleButton"
-        ToggleButton.BackgroundColor3 = Color3.fromRGB(47, 54, 64)
+        ToggleButton.BackgroundColor3 = Arg.FrameColor
         ToggleButton.BorderColor3 = Color3.fromRGB(113, 128, 147)
         ToggleButton.Position = UDim2.new(1.2061069, 0, 0.0769230798, 0)
         ToggleButton.Size = UDim2.new(0, 22, 0, 22)
@@ -417,7 +415,8 @@ function Library:Window(_Window, ...)
             Args.Enabled = not Args.Enabled
 
             ToggleFiller.Visible = Args.Enabled
-            pcall(Args.Callback, Args.Enabled, Func)
+
+            Args.Callback(Args.Enabled, Func)
         end)
 
         if Args.Disable then
@@ -426,7 +425,8 @@ function Library:Window(_Window, ...)
                 if not NewInstance.Parent then
                     if Args.Enabled then
                         Args.Enabled = false
-                        pcall(Args.Callback, Args.Enabled, Func)
+                        Args.Callback(Args.Enabled, Func)
+
                         Connection:Disconnect()
                     else
                         Connection:Disconnect()
@@ -436,7 +436,7 @@ function Library:Window(_Window, ...)
         end
 
         if Args.Enabled then
-            pcall(Args.Callback, Args.Enabled, Func)
+            Args.Callback(Args.Enabled, Func)
         end
 
         if Args.Text == "Minimise Windows" then
@@ -460,7 +460,8 @@ function Library:Window(_Window, ...)
                 elseif k == "State" then
                     Args.Enabled = v
                     ToggleFiller.Visible = Args.Enabled
-                    pcall(Args.Callback, Args.Enabled, Func)
+
+                    Args.Callback(Args.Enabled, Func)
                 end
             end,
             __index = function(t, k)
@@ -503,7 +504,6 @@ function Library:Window(_Window, ...)
         Window.Size = UDim2.new(0, 207, 0, Sizes[WinCount] + 10)
 
         local Func = {}
-        local ChangedEvent
         local KeyCode = Args.Bind.Name
 
         local BindDescription = Instance.new("TextLabel")
@@ -553,7 +553,7 @@ function Library:Window(_Window, ...)
                 if NewInstance.Parent then
                     Args.Enabled = not Args.Enabled
 
-                    pcall(Args.Callback, Args.Enabled, KeyCode, Func)
+                    Args.Callback(Args.Enabled, KeyCode, Func)
                 else
                     Connection:Disconnect()
                 end
@@ -561,7 +561,7 @@ function Library:Window(_Window, ...)
         end)
 
         if Args.ExCallback then
-            pcall(Args.Callback, Args.Enabled, KeyCode, Func)
+            Args.Callback(Args.Enabled, KeyCode, Func)
         end
 
         return setmetatable(Func, {
@@ -578,7 +578,7 @@ function Library:Window(_Window, ...)
                     BindDescription.Visible = v
                 elseif k == "State" then
                     Args.Enabled = v
-                    pcall(Args.Callback, Args.Enabled, Func)
+                    Args.Callback(Args.Enabled, Func)
                 elseif k == "Bind" then
                     KeyCode = CheckEnum(Enum.KeyCode, v) or KeyCode
                     BindButton.Text = KeyCode
@@ -630,7 +630,7 @@ function Library:Window(_Window, ...)
         local Backup
 
         local TextBox = Instance.new("TextBox")
-        TextBox.BackgroundColor3 = Color3.fromRGB(53, 59, 72)
+        TextBox.BackgroundColor3 = Arg.FrameColor
         TextBox.BorderColor3 = Color3.fromRGB(113, 128, 147)
         TextBox.Position = UDim2.new(0, 99, 0, ListOffset[WinCount])
         TextBox.Size = UDim2.new(0, 95, 0, 26)
@@ -646,11 +646,7 @@ function Library:Window(_Window, ...)
         TextBox.ZIndex = 2 + ZIndex
         TextBox.Parent = Window
         TextBox:GetPropertyChangedSignal("Text"):Connect(function()
-            if TextBox.Text ~= "" then
-                pcall(Arg.Callback, TextBox.Text, false, Func)
-            end
-
-            if Args.Type == "Number" then
+            if Args.Type == Enum.TextInputType.Number or Args.Type == Enum.TextInputType.Phone then
                 if not tonumber(TextBox.Text) and TextBox.Text:sub(1, #TextBox.Text) ~= "-" then
                     TextBox.Text = ""
                 end
@@ -659,7 +655,11 @@ function Library:Window(_Window, ...)
 
         TextBox.FocusLost:Connect(function()
             if TextBox.Text ~= "" then
-                pcall(Args.Callback, TextBox.Text, true, Func)
+                if Args.Type == Enum.TextInputType.Number or Args.Type == Enum.TextInputType.Phone then
+                    Args.Callback(tonumber(TextBox.Text), Func)
+                else
+                    Args.Callback(TextBox.Text, Func)
+                end
 
                 if Args.ClearText then
                     Backup = TextBox.Text
@@ -861,7 +861,7 @@ function Library:Window(_Window, ...)
         local function SliderEnd(Input)
             if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
                 local Value = Lerp(Args.Min, Args.Max, SliderButton.Position.X.Offset / (Slider.Size.X.Offset - 5))
-                pcall(Args.Callback, math.round(Value), Func)
+                Args.Callback(math.round(Value), Func)
             end
         end
 
@@ -877,7 +877,7 @@ function Library:Window(_Window, ...)
 
         SliderButton.Position = UDim2.new(0, (Slider.Size.X.Offset - 5) * ((Args.Default - Args.Min) / (Args.Max - Args.Min)), -1.333337, 0)
         SliderButton.Name = "SliderButton"
-        SliderButton.BackgroundColor3 = Color3.fromRGB(53, 59, 72)
+        SliderButton.BackgroundColor3 = Arg.FrameColor
         SliderButton.BorderColor3 = Color3.fromRGB(113, 128, 147)
         SliderButton.Size = UDim2.new(0, 6, 0, 22)
         SliderButton.ZIndex = 3 + ZIndex
@@ -1009,7 +1009,7 @@ function Library:Window(_Window, ...)
 
         local Dropdown = Instance.new("TextButton")
         Dropdown.Name = "Dropdown"
-        Dropdown.BackgroundColor3 = Color3.fromRGB(53, 59, 72)
+        Dropdown.BackgroundColor3 = Arg.FrameColor
         Dropdown.BorderColor3 = Color3.fromRGB(113, 128, 147)
         Dropdown.Position = UDim2.new(0, 12, 0, ListOffset[WinCount])
         Dropdown.Size = UDim2.new(0, 182, 0, 26)
@@ -1040,8 +1040,8 @@ function Library:Window(_Window, ...)
         local DropdownFrame = Instance.new("ScrollingFrame")
         DropdownFrame.Name = "DropdownFrame"
         DropdownFrame.Active = true
-        DropdownFrame.BackgroundColor3 = Color3.fromRGB(53, 59, 72)
-        DropdownFrame.BorderColor3 = Color3.fromRGB(53, 59, 72)
+        DropdownFrame.BackgroundColor3 = Arg.FrameColor 
+        DropdownFrame.BorderColor3 = Arg.FrameColor 
         DropdownFrame.Position = UDim2.new(0, 0, 0, 28)
         DropdownFrame.Size = UDim2.new(0, 182, 0, 0)
         DropdownFrame.Visible = false
@@ -1074,7 +1074,7 @@ function Library:Window(_Window, ...)
 
             local Button = Instance.new("TextButton")
             Button.Name = "Button"
-            Button.BackgroundColor3 = Color3.fromRGB(53, 59, 72)
+            Button.BackgroundColor3 = Arg.FrameColor
             Button.BorderColor3 = Color3.fromRGB(113, 128, 147)
             Button.Position = UDim2.new(0, 6, 0, CanvasSize + 1)
             Button.Size = UDim2.new(0, 170, 0, 26)
@@ -1097,7 +1097,7 @@ function Library:Window(_Window, ...)
             end
 
             Button.MouseButton1Down:Connect(function()
-                pcall(Args.Callback, ButtonText)
+                Args.Callback(ButtonText)
                 DropdownFrame.Visible = false
 
                 if Args.Selective then
@@ -1307,7 +1307,7 @@ function Library:Window(_Window, ...)
                     if ToggleFiller_2.Visible then
                         local Hue2 = tick() % 5 / 5
                         _Color3 = Color3.fromHSV(Hue2, 1, 1)
-                        pcall(Args.Callback, _Color3, true, Func)
+                        Args.Callback(_Color3, true, Func)
                         ColorPicker.BackgroundColor3 = _Color3
                     else
                         Connection:Disconnect()
@@ -1324,7 +1324,7 @@ function Library:Window(_Window, ...)
                     if ToggleFiller_2.Visible then
                         local Hue2 = tick() % 5 / 5
                         _Color3 = Color3.fromHSV(Hue2, 1, 1)
-                        pcall(Args.Callback, _Color3, true, Func)
+                        Args.Callback(_Color3, true, Func)
                         ColorPicker.BackgroundColor3 = _Color3
                     else
                         Connection:Disconnect()
@@ -1365,7 +1365,7 @@ function Library:Window(_Window, ...)
 
                         Cursor.Position = UDim2.fromOffset(X - 4, Y - 4)
                         ColorPicker.BackgroundColor3 = _Color3
-                        pcall(Args.Callback, _Color3, Func)
+                        Args.Callback(_Color3, false, Func)
                     else
                         _Connection:Disconnect()
                     end
@@ -1404,7 +1404,7 @@ function Library:Window(_Window, ...)
 
                         _Color3 = Color3.fromHSV(Hue, Sat, Brightness)
                         ColorPicker.BackgroundColor3  = _Color3
-                        pcall(Args.Callback, _Color3, Func)
+                        Args.Callback(_Color3, false, Func)
                     else
                         _Connection:Disconnect()
                     end
@@ -1467,7 +1467,7 @@ function Library:Window(_Window, ...)
                     if ToggleFiller_2.Visible then
                         local hue2 = tick() % 5 / 5
                         _Color3 = Color3.fromHSV(hue2, 1, 1)
-                        pcall(Args.Callback, _Color3, Func)
+                        Args.Callback(_Color3, false, Func)
                         ColorPicker.BackgroundColor3 = _Color3
                     else
                         Connection:Disconnect()
@@ -1506,7 +1506,7 @@ function Library:Window(_Window, ...)
                             if ToggleFiller_2.Visible then
                                 local hue2 = tick() % 5 / 5
                                 _Color3 = Color3.fromHSV(hue2, 1, 1)
-                                pcall(Args.Callback, _Color3, Func)
+                                Args.Callback(_Color3, false, Func)
                                 ColorPicker.BackgroundColor3 = _Color3
                             else
                                 Connection:Disconnect()
