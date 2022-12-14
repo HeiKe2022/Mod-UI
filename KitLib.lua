@@ -18,27 +18,44 @@ local ColorPickers = {}
 local Mouse = Players.LocalPlayer:GetMouse()
 
 -- Data Settings
+local Default = {
+    Key = "LeftControl",
+    Minimized = false
+}
+
 local Success, Setting = pcall(function()
     if readfile then
         return HttpService:JSONDecode(readfile("TurtleSettings.json"))
     else
-        return {
-            Key = "LeftControl"
-        }
+        return Default
     end
 end)
 
-if not Success and writefile then
-    Setting = {
-        Key = "LeftControl"
-    }
+if writefile then
+    if not Success then
+        Setting = Default
 
-    writefile("TurtleSettings.json", HttpService:JSONEncode(Setting))
+        writefile("TurtleSettings.json", HttpService:JSONEncode(Setting))
+    else
+        for i,v in pairs(Setting) do
+            if not Default[i] then
+                Setting[i] = nil
+            end
+        end
+
+        for i,v in pairs(Default) do
+            if not Setting[i] then
+                Setting[i] = v
+            end
+        end
+
+        writefile("TurtleSettings.json", HttpService:JSONEncode(Setting))
+    end
 end
 
 -- Instance
 pcall(function()
-    OldInstance:Destroy()
+    getgenv().OldInstance:Destroy()
 end)
 
 local NewInstance = Instance.new("ScreenGui")
@@ -168,20 +185,20 @@ function Library:Window(_Window, ...)
     Window.ZIndex = 1 + ZIndex
     Window.Parent = Header
 
-    local Minimise = Instance.new("TextButton")
-    Minimise.Name = "Minimise"
-    Minimise.BackgroundTransparency = 1
-    Minimise.Position = UDim2.new(0, 185, 0, 2)
-    Minimise.Size = UDim2.new(0, 22, 0, 22)
-    Minimise.ZIndex = 7 + ZIndex
-    Minimise.Font = Enum.Font.SourceSansLight
-    Minimise.Text = "-"
-    Minimise.TextColor3 = Arg.TextColor
-    Minimise.TextSize = 22
-    Minimise.Parent = Header
-    Minimise.MouseButton1Down:Connect(function()
+    local Minimize = Instance.new("TextButton")
+    Minimize.Name = "Minimize"
+    Minimize.BackgroundTransparency = 1
+    Minimize.Position = UDim2.new(0, 185, 0, 2)
+    Minimize.Size = UDim2.new(0, 22, 0, 22)
+    Minimize.ZIndex = 7 + ZIndex
+    Minimize.Font = Enum.Font.SourceSansLight
+    Minimize.Text = "-"
+    Minimize.TextColor3 = Arg.TextColor
+    Minimize.TextSize = 22
+    Minimize.Parent = Header
+    Minimize.MouseButton1Down:Connect(function()
         Window.Visible = not Window.Visible
-        Minimise.Text = Window.Visible and "-" or "+"
+        Minimize.Text = Window.Visible and "-" or "+"
     end)
 
     local Functions = {}
@@ -197,9 +214,9 @@ function Library:Window(_Window, ...)
         end
 
         Args.Text = (Args.Text or Args[1]) or "Label"
-        Args.TextColor = (Args.Color or Args[2]) or Color3.fromRGB(220, 221, 225)
+        Args.TextColor = (Args.TextColor or Args[2]) or Color3.fromRGB(220, 221, 225)
 
-        Args.Font = (Arg.Font and CheckEnum(Enum.Font, Arg.Font)) or Enum.Font.SourceSans
+        Args.Font = (Args.Font and CheckEnum(Enum.Font, Args.Font)) or Enum.Font.SourceSans
         Args.TextSize = Args.TextSize or 16
         Args.MouseEnter = Args.MouseEnter or function() end
         Args.MouseLeave = Args.MouseLeave or function() end
@@ -289,7 +306,7 @@ function Library:Window(_Window, ...)
 
         Args.TextColor = Args.TextColor or Color3.fromRGB(245, 246, 250)
         Args.TextSize = Args.TextSize or 16
-        Args.Font = (Arg.Font and CheckEnum(Enum.Font, Arg.Font)) or Enum.Font.SourceSans
+        Args.Font = (Args.Font and CheckEnum(Enum.Font, Args.Font)) or Enum.Font.SourceSans
 
         Sizes[WinCount] = Sizes[WinCount] + 32
         ListOffset[WinCount] = ListOffset[WinCount] + 32
@@ -439,8 +456,8 @@ function Library:Window(_Window, ...)
             Args.Callback(Args.Enabled, Func)
         end
 
-        if Args.Text == "Minimise Windows" then
-            Window:SetAttribute("MinimiseButton", true)
+        if Args.Text == "Minimize Windows" then
+            Window:SetAttribute("MinimizeButton", true)
         end
 
         PastSliders[WinCount] = false
@@ -490,7 +507,7 @@ function Library:Window(_Window, ...)
         end
 
         Args.Text = (Args.Text or Args[1]) or "Bind"
-        Args.Bind = CheckEnum(Enum.KeyCode, (Args.Bind or Args[2])) or Enum.KeyCode.A
+        Args.Bind = (Args.Bind or Args[2]) and CheckEnum(Enum.KeyCode, (Args.Bind or Args[2])) or Enum.KeyCode.A
         Args.Enabled = (Args.Enabled or Args[3]) or false
         Args.Callback = (Args.Callback or Args[4]) or function() end
         Args.ExCallback = (Args.ExCallback or Args[5]) or false
@@ -509,7 +526,7 @@ function Library:Window(_Window, ...)
         local BindDescription = Instance.new("TextLabel")
         BindDescription.Name = "BindDescription"
         BindDescription.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-        BindDescription.BackgroundTransparency = 1.000
+        BindDescription.BackgroundTransparency = 1
         BindDescription.Position = UDim2.new(0, 14, 0, ListOffset[WinCount])
         BindDescription.Size = UDim2.new(0, 131, 0, 26)
         BindDescription.Font = Args.Font
@@ -523,13 +540,13 @@ function Library:Window(_Window, ...)
 
         local BindButton = Instance.new("TextButton")
         BindButton.Name = "BindButton"
-        BindButton.BackgroundColor3 = Color3.fromRGB(47, 54, 64)
+        BindButton.BackgroundColor3 = Arg.BackgroundColor
         BindButton.BorderColor3 = Color3.fromRGB(113, 128, 147)
         BindButton.Position = UDim2.new(0, 115, 0, 0)
         BindButton.Size = UDim2.new(0, 70, 0, 22)
         BindButton.Font = Args.Font
         BindButton.Text = KeyCode
-        BindButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+        BindButton.TextColor3 = Args.TextColor
         BindButton.TextSize = 14.000
         BindButton.ZIndex = 2 + ZIndex
         BindButton.Parent = BindDescription
@@ -1555,15 +1572,21 @@ function Library:Window(_Window, ...)
         })
     end
 
-    function Functions:MinimiseWindows()
+    function Functions:MinimizeWindows()
         Functions:Toggle({
-            Text = "Minimise Windows",
-            Callback = function(State)
+            Text = "Minimize Windows",
+            Enabled = Setting.Minimized,
+            Callback = function(State, Func)
                 for _,v in pairs(NewInstance:GetChildren()) do
-                    if not v.Header.Window:GetAttribute("MinimiseButton") then
+                    if not v.Header.Window:GetAttribute("MinimizeButton") then
                         v.Header.Window.Visible = not State
-                        v.Header.Minimise.Text = v.Header.Window.Visible and "-" or "+"
+                        v.Header.Minimize.Text = v.Header.Window.Visible and "-" or "+"
                     end
+                end
+
+                if writefile then
+                    Setting.Minimized = Func.State
+                    writefile("TurtleSettings.json", HttpService:JSONEncode(Setting))
                 end
             end
         })
